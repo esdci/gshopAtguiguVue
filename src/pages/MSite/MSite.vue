@@ -2,26 +2,27 @@
 
   <!--首页外卖-->
   <section class="msite">
-    <!--首页头部-->
+<!--    &lt;!&ndash;首页头部&ndash;&gt;
     <header class="msite_header">
-
-<!--原有图标-->
-<!--          <span class="header_search">-->
-<!--            <i class="iconfont icon-sousuo"></i>-->
-<!--          </span>-->
-
-<!--现使用图标-->
-<!--      <span class="icon">-->
-      <span class="header_search">
-        <i class="iconfont iconheadersearch"></i>
-      </span>
+          <span class="header_search">
+            <i class="iconfont icon-sousuo"></i>
+          </span>
       <span class="header_title">
             <span class="header_title_text ellipsis">昌平区北七家宏福科技园(337省道北)</span>
           </span>
       <span class="header_login">
             <span class="header_login_text">登录|注册</span>
           </span>
-    </header>
+    </header>-->
+    <!--首页头部-->
+    <HeaderTop title="昌平区北七家宏福科技园(337省道北)">
+      <span class="header_search" slot="left">
+        <i class="iconfont iconheadersearch"></i>
+      </span>
+      <span class="header_login" slot="right">
+        <span class="header_login_text">登录|注册</span>
+      </span>
+    </HeaderTop>
     <!--首页导航-->
     <nav class="msite_nav">
       <div class="swiper-container">
@@ -137,238 +138,47 @@
         <i class="iconfont icon-xuanxiang"></i>
         <span class="shop_header_title">附近商家</span>
       </div>
-      <div class="shop_container">
-        <ul class="shop_list">
-          <li class="shop_li border-1px">
-            <a>
-              <div class="shop_left">
-                <img class="shop_img" src="./images/shop/1.jpg">
-              </div>
-              <div class="shop_right">
-                <section class="shop_detail_header">
-                  <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                  <ul class="shop_detail_ul">
-                    <li class="supports">保</li>
-                    <li class="supports">准</li>
-                    <li class="supports">票</li>
-                  </ul>
-                </section>
-                <section class="shop_rating_order">
-                  <section class="shop_rating_order_left">
-                    <div class="star star-24">
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item half"></span>
-                      <span class="star-item off"></span>
-                    </div>
-                    <div class="rating_section">
-                      3.6
-                    </div>
-                    <div class="order_section">
-                      月售106单
-                    </div>
-                  </section>
-                  <section class="shop_rating_order_right">
-                    <span class="delivery_style delivery_right">硅谷专送</span>
-                  </section>
-                </section>
-                <section class="shop_distance">
-                  <p class="shop_delivery_msg">
-                    <span>¥20起送</span>
-                    <span class="segmentation">/</span>
-                    <span>配送费约¥5</span>
-                  </p>
-                </section>
-              </div>
-            </a>
-          </li>
-          <li class="shop_li border-1px">
-            <a>
-              <div class="shop_left">
-                <img class="shop_img" src="./images/shop/2.jpg">
-              </div>
-              <div class="shop_right">
-                <section class="shop_detail_header">
-                  <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                  <ul class="shop_detail_ul">
-                    <li class="supports">保</li>
-                    <li class="supports">准</li>
-                    <li class="supports">票</li>
-                  </ul>
-                </section>
-                <section class="shop_rating_order">
-                  <section class="shop_rating_order_left">
-                    <div class="star star-24">
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item off"></span>
-                    </div>
-                    <div class="rating_section">
-                      4.1
-                    </div>
-                    <div class="order_section">
-                      月售106单
-                    </div>
-                  </section>
-                  <section class="shop_rating_order_right">
-                    <span class="delivery_style delivery_right">硅谷专送</span>
-                  </section>
-                </section>
-                <section class="shop_distance">
-                  <p class="shop_delivery_msg">
-                    <span>¥20起送</span>
-                    <span class="segmentation">/</span>
-                    <span>配送费约¥5</span>
-                  </p>
-                </section>
-              </div>
-            </a>
-          </li>
-          <li class="shop_li border-1px">
-            <a>
-              <div class="shop_left">
-                <img class="shop_img" src="./images/shop/3.jpg">
-              </div>
-              <div class="shop_right">
-                <section class="shop_detail_header">
-                  <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                  <ul class="shop_detail_ul">
-                    <li class="supports">保</li>
-                    <li class="supports">准</li>
-                    <li class="supports">票</li>
-                  </ul>
-                </section>
-                <section class="shop_rating_order">
-                  <section class="shop_rating_order_left">
-                    <div class="star star-24">
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item off"></span>
-                      <span class="star-item off"></span>
-                    </div>
-                    <div class="rating_section">
-                      3.2
-                    </div>
-                    <div class="order_section">
-                      月售106单
-                    </div>
-                  </section>
-                  <section class="shop_rating_order_right">
-                    <span class="delivery_style delivery_right">硅谷专送</span>
-                  </section>
-                </section>
-                <section class="shop_distance">
-                  <p class="shop_delivery_msg">
-                    <span>¥20起送</span>
-                    <span class="segmentation">/</span>
-                    <span>配送费约¥5</span>
-                  </p>
-                </section>
-              </div>
-            </a>
-          </li>
-          <li class="shop_li border-1px">
-            <a>
-              <div class="shop_left">
-                <img class="shop_img" src="./images/shop/4.jpg">
-              </div>
-              <div class="shop_right">
-                <section class="shop_detail_header">
-                  <h4 class="shop_title ellipsis">锄禾日当午，汗滴禾下土</h4>
-                  <ul class="shop_detail_ul">
-                    <li class="supports">保</li>
-                    <li class="supports">准</li>
-                    <li class="supports">票</li>
-                  </ul>
-                </section>
-                <section class="shop_rating_order">
-                  <section class="shop_rating_order_left">
-                    <div class="star star-24">
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item on"></span>
-                      <span class="star-item half"></span>
-                      <span class="star-item off"></span>
-                    </div>
-                    <div class="rating_section">
-                      3.6
-                    </div>
-                    <div class="order_section">
-                      月售106单
-                    </div>
-                  </section>
-                  <section class="shop_rating_order_right">
-                    <span class="delivery_style delivery_right">硅谷专送</span>
-                  </section>
-                </section>
-                <section class="shop_distance">
-                  <p class="shop_delivery_msg">
-                    <span>¥20起送</span>
-                    <span class="segmentation">/</span>
-                    <span>配送费约¥5</span>
-                  </p>
-                </section>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <ShopList></ShopList>
     </div>
   </section>
 </template>
 
 <script>
+import HeaderTop from "../../components/HeaderTop/HeaderTop";
 
-export default {}
+// Import Swiper Vue.js components
+import Swiper from 'swiper';
+// Import Swiper styles
+// 旧文档引入CSS
+//import 'swiper/dist/css/swiper.css'
+// Swiper 6.0及以上
+import 'swiper/swiper-bundle.css'
+
+import ShopList from "../../components/ShopList/ShopList";
+
+export default {
+  mounted(){
+    //创建一个Swiper实例对象，来实现轮播
+    new Swiper('.swiper-container',{
+      loop:true,   //可以循环轮播
+      //如果需要分页器
+      pagination:{
+        el:'.swiper-pagination'
+      }
+    })
+  },
+
+  components:{
+    HeaderTop,
+    ShopList
+  }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
 @import "../../common/stylus/mixins.styl"
 .msite  //首页
   width 100%
-  .msite_header
-    background-color #02a774
-    position fixed
-    z-index 100
-    left 0
-    top 0
-    width 100%
-    height 45px
-    .header_search
-      position absolute
-      left 15px
-      top 50%
-      transform translateY(-50%)
-      width 10%
-      height 50%
-      .icon-sousuo
-        font-size 25px
-        color #fff
-    .header_title
-      position absolute
-      top 50%
-      left 50%
-      transform translate(-50%, -50%)
-      width 50%
-      color #fff
-      text-align center
-      .header_title_text
-        font-size 20px
-        color #fff
-        display block
-    .header_login
-      font-size 14px
-      color #fff
-      position absolute
-      right 15px
-      top 50%
-      transform translateY(-50%)
-      .header_login_text
-        color #fff
   .msite_nav
     bottom-border-1px(#e4e4e4)
     margin-top 45px
