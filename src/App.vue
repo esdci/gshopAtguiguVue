@@ -7,13 +7,20 @@
 
 <script>
 import FooterGuide from "./components/FooterGuide/FooterGuide";
-import {reqFoodTypes} from "./api";
+import {reqFoodCategorys} from "./api";
+import {mapActions} from 'vuex'
 
 export default {
 
   async mounted(){
-    const result = await reqFoodTypes()
-    console.log(result)
+/*    const result = await reqFoodTypes()
+    console.log(result)*/
+    //this.$store.dispatch('getAddress')
+    this.getAddress()
+  },
+
+  methods:{
+    ...mapActions(['getAddress'])
   },
 
   components:{
