@@ -2,27 +2,18 @@
 
   <!--首页外卖-->
   <section class="msite">
-<!--    &lt;!&ndash;首页头部&ndash;&gt;
-    <header class="msite_header">
-          <span class="header_search">
-            <i class="iconfont icon-sousuo"></i>
-          </span>
-      <span class="header_title">
-            <span class="header_title_text ellipsis">昌平区北七家宏福科技园(337省道北)</span>
-          </span>
-      <span class="header_login">
-            <span class="header_login_text">登录|注册</span>
-          </span>
-    </header>-->
-    <!--首页头部-->
-<!--    <HeaderTop title="昌平区北七家宏福科技园(337省道北)">-->
     <HeaderTop :title = "address.name">
-      <span class="header_search" slot="left">
+      <router-link class="header_search" slot="left" to="/search">
         <i class="iconfont iconheadersearch"></i>
-      </span>
-      <span class="header_login" slot="right">
-        <span class="header_login_text">登录|注册</span>
-      </span>
+      </router-link>
+      <router-link class="header_login" slot="right" :to="userInfo._id ? '/userinfo': '/login'">
+        <span class="header_login_text" v-if="!userInfo._id">
+          登录|注册
+        </span>
+        <span class="header_login_text" v-else>
+           <i class="iconfont iconContactPerson"></i>
+        </span>
+      </router-link>
     </HeaderTop>
     <!--首页导航-->
     <nav class="msite_nav">
@@ -68,6 +59,7 @@ import ShopList from "../../components/ShopList/ShopList";
 
 import {mapState} from 'vuex'
 
+
 export default {
 
   data(){
@@ -82,7 +74,7 @@ export default {
   },
 
   computed:{
-    ...mapState(['address', "categorys"]),
+    ...mapState(['address', 'categorys', 'userInfo']),
 
     /*根据categorys一维数组生成一个二维数组
     * 小数组中的元素个数最大是8

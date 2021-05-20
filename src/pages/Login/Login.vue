@@ -15,7 +15,9 @@
               <section class="login_message">
                 <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
                 <button :disabled="!rightPhone" class="get_verification"
-                        :class="{right_phone: rightPhone}" @click.prevent="getCode">{{computeTime ? `已发送(${computeTime}s)` : '获取验证码'}}</button>
+                        :class="{right_phone: rightPhone}" @click.prevent="getCode">
+                  {{ computeTime ? `已发送(${computeTime}s)` : '获取验证码' }}
+                </button>
               </section>
               <section class="login_verification">
                 <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
@@ -35,12 +37,12 @@
                   <input type="password" maxlength="8" placeholder="密码" v-else v-model="pwd">
                   <div class="switch_button" :class="showPwd?'on':'off'" @click="showPwd=!showPwd">
                     <div class="switch_circle" :class="{right:showPwd}"></div>
-                    <span class="switch_text">{{showPwd?'abc':'...'}}</span>
+                    <span class="switch_text">{{ showPwd ? 'abc' : '...' }}</span>
                   </div>
                 </section>
                 <section class="login_message">
                   <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                  <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                  <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
                 </section>
               </section>
             </div>
@@ -59,85 +61,140 @@
 
 <script>
 import AlertTip from "../../components/AlertTip/AlertTip";
+import {reqSendCode, reqSmsLogin, reqPwdLogin} from "../../api";
+
 export default {
-  data(){
-    return{
-      loginWay:true,   //true短信，false密码
-      phone:'',   //手机号
-      computeTime:0, //倒计时
-      showPwd:false,  //是否显示密码
-      pwd:'',   //密码
-      code:'',   //短信验证码
-      name:'',   //用户名
-      captcha:'',   //图像验证码
-      alertText:'',   //提示文本
-      alertShow:false,   //是否显示提示框
+  data() {
+    return {
+      loginWay: true,   //true短信，false密码
+      phone: '',   //手机号
+      computeTime: 0, //倒计时
+      showPwd: false,  //是否显示密码
+      pwd: '',   //密码
+      code: '',   //短信验证码
+      name: '',   //用户名
+      captcha: '',   //图像验证码
+      alertText: '',   //提示文本
+      alertShow: false,   //是否显示提示框
     }
   },
 
-  computed:{
-    rightPhone(){
+  computed: {
+    rightPhone() {
       return /^1\d{10}$/.test(this.phone)
     }
   },
 
-  methods:{
+  methods: {
     //异步获取短信验证码
-    getCode(){
+    async getCode() {
       //如果当前没有定时
-      if(!this.computeTime){
+      if (!this.computeTime) {
         //启动倒计时
         this.computeTime = 30
-        const intervalId = setInterval(() => {
+        this.intervalId = setInterval(() => {
           this.computeTime--
-          if(this.computeTime <= 0){
-            clearInterval(intervalId)
+          if (this.computeTime <= 0) {
+            //停止计时
+            clearInterval(this.intervalId)
           }
         }, 1000)
-        //发送倒计时
+
+        //发送ajax请求（向指定手机号发送验证码短信）
+        const result = await reqSendCode(this.phone)
+        if (result.code === 1) {
+          //显示提示
+          this.showAlert(result.msg)
+          //停止计时
+          if (this.computeTime) {
+            this.computeTime = 0
+            clearInterval(this.intervalId)
+            this.intervalId = undefined
+          }
+        }
       }
     },
 
     //
-    showAlert(alertText){
+    showAlert(alertText) {
       this.alertShow = true
       this.alertText = alertText
     },
     // 关闭警告框
-    closeTip () {
+    closeTip() {
       this.alertShow = false
       this.alertText = ''
     },
 
     //异步登陆
-    login(){
-      if(this.loginWay){   //短信登陆
+    async login() {
+      let result
+      if (this.loginWay) {   //短信登陆
         const {rightPhone, phone, code} = this
-        if(!this.rightPhone){
+        if (!this.rightPhone) {
           //手机号不正确
           this.showAlert('手机号不正确')
-        }else if(!/^\d{6}$/.test(code)){
+          return
+        } else if (!/^\d{6}$/.test(code)) {
           //验证码必须是6位数字
           this.showAlert('验证码必须是6位数字')
+          return
         }
-      }else {   //密码登陆
-        const {rightPhone, phone, code} = this
-        if(!this.rightPhone){
+        //发送ajax请求短信登陆
+        result = await reqSmsLogin(phone, code)
+
+      } else {   //密码登陆
+        const {name, pwd, captcha} = this
+        if (!this.name) {
           //用户名必须指定
           this.showAlert('用户名必须指定')
-        }else if(!this.pwd){
+          return
+        } else if (!this.pwd) {
           //密码必须指定
           this.showAlert('密码必须指定')
-        }else if(!this.name){
+          return
+        } else if (!this.captcha) {
           //验证码必须指定
           this.showAlert('验证码必须指定')
+          return
         }
+
+        //发送ajax请求密码登陆
+        result = await reqPwdLogin({name, pwd, captcha})
       }
+
+      //停止计时
+      if (this.computeTime) {
+        this.computeTime = 0
+        clearInterval(this.intervalId)
+        this.intervalId = undefined
+      }
+      //根据结果数据处理
+      if (result.code === 0) {
+        const user = result.data
+        //将user保存到vuex的state
+        this.$store.dispatch('recordUser', user)
+        //去个人中心界面
+        this.$router.replace('/profile')
+      } else {
+        //显示新的图片验证码
+        this.getCaptcha()
+        //显示警告信息
+        const msg = result.msg
+        this.showAlert(msg)
+      }
+
+    },
+
+    //获取新的验证码
+    getCaptcha(captcha) {
+      //每次指定的src要不一样
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()   //ajax请求跨域，这不是ajax请求。
     }
 
   },
 
-  components:{
+  components: {
     AlertTip
   }
 }
@@ -149,35 +206,44 @@ export default {
   width 100%
   height 100%
   background #fff
+
   .loginInner
     padding-top 60px
     width 80%
     margin 0 auto
+
     .login_header
       .login_logo
         font-size 40px
         font-weight bold
         color #02a774
         text-align center
+
       .login_header_title
         padding-top 40px
         text-align center
-        >a
+
+        > a
           color #333
           font-size 14px
           padding-bottom 4px
+
           &:first-child
             margin-right 40px
+
           &.on
             color #02a774
             font-weight 700
             border-bottom 2px solid #02a774
+
     .login_content
-      >form
-        >div
+      > form
+        > div
           display none
+
           &.on
             display block
+
           input
             width 100%
             height 100%
@@ -187,14 +253,17 @@ export default {
             border-radius 4px
             outline 0
             font 400 14px Arial
+
             &:focus
               border 1px solid #02a774
+
           .login_message
             position relative
             margin-top 16px
             height 48px
             font-size 14px
             background #fff
+
             .get_verification
               position absolute
               top 50%
@@ -204,19 +273,22 @@ export default {
               color #ccc
               font-size 14px
               background transparent
+
               &.right_phone
                 color black
+
           .login_verification
             position relative
             margin-top 16px
             height 48px
             font-size 14px
             background #fff
+
             .switch_button
               font-size 12px
               border 1px solid #ddd
               border-radius 8px
-              transition background-color .3s,border-color .3s
+              transition background-color .3s, border-color .3s
               padding 0 6px
               width 30px
               height 16px
@@ -226,14 +298,18 @@ export default {
               top 50%
               right 10px
               transform translateY(-50%)
+
               &.off
                 background #fff
+
                 .switch_text
                   float right
                   color #ddd
+
               &.on
                 background #02a774
-              >.switch_circle
+
+              > .switch_circle
                 //transform translateX(27px)
                 position absolute
                 top -1px
@@ -243,17 +319,21 @@ export default {
                 border 1px solid #ddd
                 border-radius 50%
                 background #fff
-                box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
+                box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
                 transition transform .3s
+
                 &.right
                   transform translateX(30px)
+
           .login_hint
             margin-top 12px
             color #999
             font-size 14px
             line-height 20px
-            >a
+
+            > a
               color #02a774
+
         .login_submit
           display block
           width 100%
@@ -266,19 +346,22 @@ export default {
           font-size 16px
           line-height 42px
           border 0
+
       .about_us
         display block
         font-size 12px
         margin-top 20px
         text-align center
         color #999
+
     .go_back
       position absolute
       top 5px
       left 5px
       width 30px
       height 30px
-      >.iconfont
+
+      > .iconfont
         font-size 20px
         color #999
 </style>
